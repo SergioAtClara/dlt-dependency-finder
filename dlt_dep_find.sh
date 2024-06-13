@@ -58,7 +58,7 @@ dep_search() {
 
 # Loop through each SQL model file in the directory
 mart_files=$(find "$marts_dir" -type f -name "$mart_to_search.sql")
-for mart_file in "${mart_files[@]}"; do
+for mart_file in $mart_files; do
     # echo "Dependencies for $marts_dir:"
     echo ""
     echo "Source files for $mart_file:"
