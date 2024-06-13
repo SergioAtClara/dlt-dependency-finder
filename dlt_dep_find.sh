@@ -40,7 +40,7 @@ dep_search() {
         all_files=$(find "$dir" -type f -name "*.sql")
 
         for model_file in $all_files; do
-            if grep -q -E "(CREATE TEMPORARY|CREATE OR REFRESH) LIVE (VIEW|TABLE) $1 AS" "$model_file"; then
+            if grep -q -E "CREATE( OR REFRESH)?( TEMPORARY)? LIVE (VIEW|TABLE) $1 AS" "$model_file"; then
 
                 debug_echo "found dependency $mart_dep_table_name in $model_file"
                 echo_path_without_base "    \"$model_file\","
@@ -61,7 +61,8 @@ mart_files=$(find "$marts_dir" -type f -name "$mart_to_search.sql")
 for mart_file in $mart_files; do
     # echo "Dependencies for $marts_dir:"
     echo ""
-    echo "Source files for $mart_file:"
+    debug_echo "Source files for $mart_file:"
+    echo_path_without_base "    \"$mart_file\","
 
     # Extract table names from the model file
     mart_dep_table_names=$(grep -o 'LIVE\.[a-zA-Z0-9_]*' "$mart_file" | sed 's/LIVE\.//')
@@ -71,5 +72,4 @@ for mart_file in $mart_files; do
         dep_search "$mart_dep_table_name"
     done
 
-    echo_path_without_base "    \"$mart_file\""
 done
