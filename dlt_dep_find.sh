@@ -40,7 +40,7 @@ dep_search() {
         all_files=$(find "$dir" -type f -name "*.sql")
 
         for model_file in $all_files; do
-            if grep -q -E "CREATE( OR REFRESH)?( TEMPORARY)? LIVE (VIEW|TABLE) $1" "$model_file"; then
+            if grep -q -E "CREATE( OR REFRESH)?( TEMPORARY)? LIVE (VIEW|TABLE) $1([AS ]+)?\(" "$model_file"; then
 
                 debug_echo "found dependency $mart_dep_table_name in $model_file"
                 echo_path_without_base "    \"$model_file\","
